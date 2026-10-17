@@ -417,7 +417,31 @@ nav>div{animation:fadeDown .7s ease-out .15s backwards}
 .nb-rings{animation:fadeUp .6s ease-out 1.5s backwards}
 .nb-ctrl{animation:fadeUp .6s ease-out 1.9s backwards}
 @media(prefers-reduced-motion:reduce){.l,.nb,.nb-tab,.nb-page{animation:none!important}}
-</style>
+
+@media(max-width:560px){
+  .nb{grid-template-columns:40px 1fr}
+  .nb-tab{width:30px}
+  .nb-tab.on{width:40px}
+  .nb-page{padding:20px 18px 18px 26px}
+  .pg-top{margin-bottom:12px}
+  .pg-ic{width:50px;height:50px;border-radius:15px;margin-bottom:12px}
+  .nb-page h3{font-size:1.5rem}
+  .pg-quiz h3{font-size:1.65rem}
+  .pg-tease{font-size:.93rem}
+  .pg-tags{margin-top:12px;gap:6px}
+  .pg-tags span{font-size:.72rem;padding:4px 10px}
+  .pg-link{padding:10px 0 4px;font-size:.92rem}
+  .pg-cta{padding:11px 20px}
+  .pg-start h3{font-size:2rem}
+}
+/* celular: nada pode alargar a página */
+html,body{overflow-x:clip}
+#hero{overflow:hidden}
+.hero-grid{grid-template-columns:minmax(0,1.05fr) minmax(0,1fr)}
+@media(max-width:900px){.hero-grid{grid-template-columns:minmax(0,1fr)}}
+.hero-grid>*{min-width:0}.tl-hint{display:none;margin-top:10px;font-size:.82rem;color:var(--muted);align-items:center;gap:8px}
+.tl-hint b{display:inline-block;color:#9ee7ff;animation:nudge 1.2s ease-in-out infinite}
+@media(max-width:1000px){.tl-hint{display:flex}}</style>
 </head>
 <body>
 <nav><a class="logo" href="#hero" aria-label="NextStep Finance, portal de estágios"><svg class="lg-mark" viewBox="0 0 48 48" aria-hidden="true"><defs><linearGradient id="lgA" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#0b5cff"/><stop offset="1" stop-color="#2fd0ff"/></linearGradient></defs><rect x="5" y="29" width="8" height="14" rx="2" fill="url(#lgA)" opacity=".55"/><rect x="17" y="21" width="8" height="22" rx="2" fill="url(#lgA)" opacity=".8"/><rect x="29" y="13" width="8" height="30" rx="2" fill="url(#lgA)"/><path d="M3.5 36.5L15 25l8 6L41 11.5" fill="none" stroke="#071a3d" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/><path d="M32 10.5h9.5V20" fill="none" stroke="#071a3d" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg><span class="lg-t"><span class="lg-n">NextStep</span><span class="lg-n lg-f">Finance</span><span class="lg-s">PORTAL DE ESTÁGIOS</span></span></a><div><a class="hide" href="#calendario">Calendário</a><a class="hide" href="#areas">Um dia na vida</a><a class="navcta" href="#cta">Receber alertas</a></div></nav>
@@ -457,6 +481,7 @@ nav>div{animation:fadeDown .7s ease-out .15s backwards}
     <div class="filters rv" id="filters"></div>
     <div class="legend rv"><span><i class="lg-open"></i>Inscrições abertas</span><span><i class="lg-fer"></i>Estágio de férias (os mais concorridos)</span></div>
     <div class="tl rv"><div class="tl-in" id="tl"></div></div>
+    <p class="tl-hint"><span>Arraste para o lado para ver o ano inteiro</span> <b>&rarr;</b></p>
         <p class="fine">* Janelas típicas do mercado brasileiro, que variam por banco e a cada ano. Confirme sempre nos canais oficiais de cada instituição.</p>
     <div class="stats rv" id="stats">
       <div class="stat" style="--i:0"><div class="st-ic" data-ic="clock" data-s="24"></div><div class="st-n"><strong data-count="12">0</strong><small>meses</small></div><span class="st-t">de espera se você perder a janela de inscrição.</span></div>
@@ -911,6 +936,13 @@ window.addEventListener('pointerup',e=>{
 new IntersectionObserver((es,o)=>es.forEach(e=>{if(!e.isIntersecting)return;o.disconnect();
   setTimeout(()=>{const p=pages[nbi];p.classList.add('peek');setTimeout(()=>p.classList.remove('peek'),1700)},2300)}),{threshold:.5}).observe(book);
 tabs.forEach((t,j)=>t.style.setProperty('--ti',j));pages.forEach((pg,j)=>pg.style.setProperty('--pi',NBT-1-j));
+function fitBook(){
+  book.style.height='';
+  const need=Math.max(...pages.map(pg=>pg.scrollHeight))+24+10;
+  if(need>book.clientHeight)book.style.height=need+'px';
+}
+fitBook();window.addEventListener('resize',fitBook);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitBook);
 nbGo(0);
 let launching=false;
 function launchQuiz(){
